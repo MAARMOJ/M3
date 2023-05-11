@@ -1,0 +1,31 @@
+Slip9 q2
+
+import pandas as pd
+
+from mlxtend.preprocessing import TransactionEncoder
+
+from mlxtend.frequent_patterns import apriori, association_rules
+
+transactions = [['bread', 'milk', 'cheese'],
+
+                ['bread', 'milk', 'eggs', 'yogurt'],
+
+                ['milk', 'cheese', 'eggs'],
+
+                ['bread', 'cheese', 'yogurt'],
+
+                ['bread', 'milk', 'eggs']]
+
+te = TransactionEncoder()
+
+te_ary = te.fit(transactions).transform(transactions)
+
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+freq_itemsets = apriori(df, min_support=0.4, use_colnames=True)
+
+assoc_rules = association_rules(freq_itemsets, metric="confidence", min_threshold=0.6)
+
+print(freq_itemsets)
+
+print(assoc_rules)
