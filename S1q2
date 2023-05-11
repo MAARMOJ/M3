@@ -1,0 +1,49 @@
+Slip1 q2
+
+import numpy as np
+
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.linear_model import LinearRegression
+
+positions = ['Business Analyst', 'Junior Consultant', 'Senior Consultant', 'Manager', 
+
+             'Country Manager', 'Region Manager', 'Partner', 'Senior Partner', 'C-level', 'CEO']
+
+levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+salaries = [45000, 50000, 60000, 80000, 110000, 150000, 200000, 300000, 500000, 1000000]
+
+data = pd.DataFrame({'Position': positions, 'Level': levels, 'Salary': salaries})
+
+X = data.iloc[:, 1:2].values
+
+y = data.iloc[:, 2].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+print('Training set:')
+
+print('X_train:', X_train)
+
+print('y_train:', y_train)
+
+print('')
+
+print('Testing set:')
+
+print('X_test:', X_test)
+
+print('y_test:', y_test)
+
+print('')
+
+regressor = LinearRegression()
+
+regressor.fit(X_train, y_train)
+
+print('Coefficients:', regressor.coef_)
+
+print('Intercept:', regressor.intercept_)
