@@ -1,0 +1,45 @@
+Slip10 q2
+
+import pandas as pd
+
+from mlxtend.preprocessing import TransactionEncoder
+
+from mlxtend.frequent_patterns import apriori, association_rules
+
+data = [['eggs', 'milk', 'bread'],
+
+        ['eggs', 'apple'],
+
+        ['milk', 'bread'],
+
+        ['apple', 'milk'],
+
+        ['milk', 'apple', 'bread']]
+
+df = pd.DataFrame(data, columns=['Items'])
+
+te = TransactionEncoder()
+
+te_ary = te.fit(df['Items']).transform(df['Items'])
+
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+for min_sup in [0.2, 0.4]:
+
+    frequent_itemsets = apriori(df, min_support=min_sup, use_colnames=True)
+
+    rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+
+    
+
+    print(f"Min support: {min_sup}")
+
+    print("Frequent itemsets:")
+
+    print(frequent_itemsets)
+
+    print("Association rules:")
+
+    print(rules)
+
+    print("\n")
