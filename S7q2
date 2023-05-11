@@ -1,0 +1,43 @@
+Slip7 q2
+
+import pandas as pd
+
+from mlxtend.preprocessing import TransactionEncoder
+
+from mlxtend.frequent_patterns import apriori, association_rules
+
+import urllib.request
+
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00352/Online%20Retail.xlsx"
+
+filename = "Online Retail.xlsx"
+
+urllib.request.urlretrieve(url, filename)
+
+df = pd.read_excel(filename)
+
+print("Number of rows and columns:", df.shape)
+
+print("Columns:", df.columns)
+
+df.dropna(inplace=True)
+
+df = df[~df['InvoiceNo'].str.contains('C')]
+
+transactions = df.groupby(['InvoiceNo', 'Description'])['Quantity'].sum().unstack().reset_index().fillna(0).set_index('InvoiceNo')
+
+transactions[transactions > 0] = 1
+
+transactions = transactions.astype(int)
+
+frequent_itemsets = apriori(transactions, min_support=0.02, use_colnames=True)
+
+rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+
+print("Frequent itemsets:")
+
+print(frequent_itemsets)
+
+print("Association rules:")
+
+print(rules)
