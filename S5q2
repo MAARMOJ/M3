@@ -1,0 +1,47 @@
+Slip5 q2
+
+import pandas as pd
+
+from sklearn.datasets import load_iris
+
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.metrics import accuracy_score
+
+iris = load_iris()
+
+iris_df = pd.DataFrame(data=iris['data'], columns=iris['feature_names'])
+
+iris_df['target'] = iris['target']
+
+iris_df['species'] = iris_df['target'].apply(lambda x: iris['target_names'][x])
+
+print("Statistical details of Iris-setosa:")
+
+print(iris_df[iris_df['species'] == 'setosa'].describe())
+
+print("\nStatistical details of Iris-versicolor:")
+
+print(iris_df[iris_df['species'] == 'versicolor'].describe())
+
+print("\nStatistical details of Iris-virginica:")
+
+print(iris_df[iris_df['species'] == 'virginica'].describe())
+
+X = iris_df[['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']]
+
+y = iris_df['species']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+lr = LogisticRegression()
+
+lr.fit(X_train, y_train)
+
+y_pred = lr.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\nAccuracy of the logistic regression model: {:.2f}%".format(accuracy*100))
