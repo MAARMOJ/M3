@@ -1,0 +1,51 @@
+Silp3 q2
+
+import numpy as np
+
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+user_id = np.arange(1, 101)
+
+gender = np.random.choice(['Male', 'Female'], size=100)
+
+age = np.random.randint(18, 65, size=100)
+
+salary = np.random.randint(20000, 100000, size=100)
+
+purchased = np.random.randint(0, 2, size=100)
+
+data = pd.DataFrame({'User ID': user_id, 'Gender': gender, 'Age': age, 'Salary': salary, 'Purchased': purchased})
+
+from sklearn.preprocessing import LabelEncoder
+
+label_encoder = LabelEncoder()
+
+data['Gender'] = label_encoder.fit_transform(data['Gender'])
+
+X = data.iloc[:, 1:4].values
+
+y = data.iloc[:, 4].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+classifier = LogisticRegression(random_state=0)
+
+classifier.fit(X_train, y_train)
+
+y_pred = classifier.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+
+print('Confusion matrix:')
+
+print(cm)
+
+print('')
+
+print('Accuracy score:', accuracy_score(y_test, y_pred))
