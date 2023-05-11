@@ -1,0 +1,47 @@
+Slip2 q2
+
+ 
+
+import numpy as np
+
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.linear_model import LinearRegression
+
+num_purchases = np.random.randint(1, 100, size=100)
+
+salary = np.random.randint(1000, 10000, size=100)
+
+data = pd.DataFrame({'Salary': salary, 'Num_Purchases': num_purchases})
+
+X = data.iloc[:, 0:1].values
+
+y = data.iloc[:, 1].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+print('Training set:')
+
+print('X_train:', X_train)
+
+print('y_train:', y_train)
+
+print('')
+
+print('Testing set:')
+
+print('X_test:', X_test)
+
+print('y_test:', y_test)
+
+print('')
+
+regressor = LinearRegression()
+
+regressor.fit(X_train, y_train)
+
+print('Coefficients:', regressor.coef_)
+
+print('Intercept:', regressor.intercept_)
